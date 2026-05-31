@@ -1,0 +1,60 @@
+name: riskratchet
+description: 'Score per-function risk, ratchet against a baseline, post a sticky PR review comment.'
+author: KayhanB21
+branding:
+  icon: bar-chart-2
+  color: blue
+
+# This is the Marketplace-listed wrapper for the root composite action
+# living in `KayhanB21/riskratchet`. Inputs are passthrough-only so the
+# action.yml in the riskratchet repo stays the single source of truth;
+# bumping the `uses:` ref below is the only release-time change here.
+
+inputs:
+  paths:
+    description: 'Files or directories to scan, space-separated. Defaults to [tool.riskratchet] paths.'
+    required: false
+    default: ''
+  coverage:
+    description: 'Path to coverage.json. Optional; auto-coverage runs if absent.'
+    required: false
+    default: ''
+  baseline:
+    description: 'Path to baseline JSON. Default `.riskratchet.json`; if the file is missing, the action runs in no-baseline `--fail-above` mode.'
+    required: false
+    default: '.riskratchet.json'
+  fail-above:
+    description: 'Threshold for no-baseline mode (when `baseline` file does not exist). Default 60.'
+    required: false
+    default: '60'
+  comment:
+    description: 'Post a sticky PR review comment. Default `true`. Set `false` for status-check-only mode.'
+    required: false
+    default: 'true'
+  python-version:
+    description: 'Python version to install. Default 3.12.'
+    required: false
+    default: '3.12'
+  riskratchet-version:
+    description: 'Pin a riskratchet version (e.g. 0.2.8). Default: latest from PyPI.'
+    required: false
+    default: ''
+  github-token:
+    description: 'Token used to upsert the PR comment. Default `${{ github.token }}`.'
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name: Delegate to KayhanB21/riskratchet
+      uses: KayhanB21/riskratchet@v0.2.8
+      with:
+        paths: ${{ inputs.paths }}
+        coverage: ${{ inputs.coverage }}
+        baseline: ${{ inputs.baseline }}
+        fail-above: ${{ inputs.fail-above }}
+        comment: ${{ inputs.comment }}
+        python-version: ${{ inputs.python-version }}
+        riskratchet-version: ${{ inputs.riskratchet-version }}
+        github-token: ${{ inputs.github-token }}

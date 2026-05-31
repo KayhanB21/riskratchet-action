@@ -1,0 +1,19 @@
+name: release
+
+# Informational only: this workflow runs on push to a vN.M.L tag and prints
+# a "tagged" message. Actual GitHub Marketplace publication happens via the
+# Releases page on github.com — there is no automation here. Bumping the
+# internal `uses:` ref in action.yml is a manual commit before tagging.
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tagged
+        run: |
+          echo "Tagged ${GITHUB_REF_NAME}. Publish via the Releases page UI."
