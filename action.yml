@@ -40,9 +40,9 @@ inputs:
     required: false
     default: ''
   github-token:
-    description: 'Token used to upsert the PR comment. Default `${{ github.token }}`.'
+    description: 'Token used to upsert the PR comment. Falls back to `${{ github.token }}` when empty.'
     required: false
-    default: ${{ github.token }}
+    default: ''
 
 runs:
   using: composite
@@ -57,4 +57,4 @@ runs:
         comment: ${{ inputs.comment }}
         python-version: ${{ inputs.python-version }}
         riskratchet-version: ${{ inputs.riskratchet-version }}
-        github-token: ${{ inputs.github-token }}
+        github-token: ${{ inputs.github-token != '' && inputs.github-token || github.token }}
