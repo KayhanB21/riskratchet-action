@@ -1,0 +1,46 @@
+name: check-delegated-ref
+
+# Guards against the wrapper silently drifting behind riskratchet. This wrapper's
+# action.yml delegates to `KayhanB21/riskratchet@vX.Y.Z`, which must be bumped (and
+# `v1` re-tagged) on every riskratchet release — a manual step that was missed for
+# four releases (the ref sat at v0.2.8). This job fails when the delegated ref does
+# not match the latest riskratchet version on PyPI.
+#
+# The weekly schedule is the load-bearing part: nothing pushes to this repo between
+# bumps, so a push/PR trigger alone would never notice the drift. The cron turns CI
+# red within a week of any new riskratchet release, prompting the bump.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Delegated ref must match the latest riskratchet release
+        run: |
+          set -euo pipefail
+          ref=$(grep -oE 'KayhanB21/riskratchet@v[0-9]+\.[0-9]+\.[0-9]+' action.yml \
+                  | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n1)
+          if [ -z "${ref:-}" ]; then
+            echo "::error file=action.yml::could not find a 'KayhanB21/riskratchet@vX.Y.Z' delegated ref"
+            exit 1
+          fi
+          latest="v$(curl -fsSL https://pypi.org/pypi/riskratchet/json \
+                       | python3 -c 'import sys,json;print(json.load(sys.stdin)["info"]["version"])')"
+          echo "delegated ref: $ref"
+          echo "latest on PyPI: $latest"
+          if [ "$ref" != "$latest" ]; then
+            echo "::error file=action.yml::action.yml delegates to riskratchet@$ref but the latest release is $latest. Bump the 'uses:' ref, commit to master, tag a new vN.M.L, and move 'v1' to it."
+            exit 1
+          fi
+          echo "Delegated ref is current."

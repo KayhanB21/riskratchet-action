@@ -36,7 +36,7 @@ inputs:
     required: false
     default: '3.12'
   riskratchet-version:
-    description: 'Pin a riskratchet version (e.g. 0.2.8). Default: latest from PyPI.'
+    description: 'Pin a riskratchet version (e.g. 0.2.12). Default: latest from PyPI.'
     required: false
     default: ''
   github-token:
@@ -48,7 +48,7 @@ runs:
   using: composite
   steps:
     - name: Delegate to KayhanB21/riskratchet
-      uses: KayhanB21/riskratchet@v0.2.8
+      uses: KayhanB21/riskratchet@v0.2.12
       with:
         paths: ${{ inputs.paths }}
         coverage: ${{ inputs.coverage }}
