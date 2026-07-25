@@ -1,7 +1,7 @@
 # riskratchet-action
 
 GitHub Marketplace wrapper for [`KayhanB21/riskratchet`](https://github.com/KayhanB21/riskratchet) — a
-maintainability ratchet for AI-assisted Python.
+maintainability ratchet for AI-assisted Python and TypeScript.
 
 This repo exists for Marketplace discoverability. The action logic lives in the
 root `action.yml` of the `riskratchet` repo; this wrapper's `action.yml`
@@ -29,7 +29,7 @@ If you already use `riskratchet`, you can skip this wrapper and reference the
 root action directly:
 
 ```yaml
-- uses: KayhanB21/riskratchet@v0.2.14
+- uses: KayhanB21/riskratchet@v0.3.0
 ```
 
 Both forms accept the same inputs. See the
