@@ -20,6 +20,11 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          # Full history: churn uses `git log --since`, which on the default
+          # shallow (depth-1) clone sees only HEAD and silently scores every
+          # function's churn as zero — so CI would disagree with your baseline.
+          fetch-depth: 0
       - uses: KayhanB21/riskratchet-action@v1
         with:
           coverage: coverage.json
@@ -29,7 +34,7 @@ If you already use `riskratchet`, you can skip this wrapper and reference the
 root action directly:
 
 ```yaml
-- uses: KayhanB21/riskratchet@v0.3.0
+- uses: KayhanB21/riskratchet@v0.3.2
 ```
 
 Both forms accept the same inputs. See the
