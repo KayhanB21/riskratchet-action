@@ -43,12 +43,24 @@ inputs:
     description: 'Token used to upsert the PR comment. Falls back to the workflow github.token when empty.'
     required: false
     default: ''
+  typescript:
+    description: 'Enable the TypeScript backend: `true` passes --typescript, `false` passes --no-typescript, empty lets [tool.riskratchet] typescript decide. Needs riskratchet 0.3.6+.'
+    required: false
+    default: ''
+  ts-coverage:
+    description: 'TypeScript coverage report(s) (LCOV or istanbul JSON), space-separated, workspace-relative. Each becomes one --ts-coverage flag; paths must not contain spaces. Needs riskratchet 0.3.6+.'
+    required: false
+    default: ''
+  ts-entry:
+    description: 'TypeScript entry file(s) for public-surface narrowing, space-separated, workspace-relative. Each becomes one --ts-entry flag; paths must not contain spaces. Needs riskratchet 0.3.6+.'
+    required: false
+    default: ''
 
 runs:
   using: composite
   steps:
     - name: Delegate to KayhanB21/riskratchet
-      uses: KayhanB21/riskratchet@v0.3.5
+      uses: KayhanB21/riskratchet@v0.3.6
       with:
         paths: ${{ inputs.paths }}
         coverage: ${{ inputs.coverage }}
@@ -58,3 +70,6 @@ runs:
         python-version: ${{ inputs.python-version }}
         riskratchet-version: ${{ inputs.riskratchet-version }}
         github-token: ${{ inputs.github-token != '' && inputs.github-token || github.token }}
+        typescript: ${{ inputs.typescript }}
+        ts-coverage: ${{ inputs.ts-coverage }}
+        ts-entry: ${{ inputs.ts-entry }}

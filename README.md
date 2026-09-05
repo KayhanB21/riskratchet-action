@@ -34,12 +34,23 @@ If you already use `riskratchet`, you can skip this wrapper and reference the
 root action directly:
 
 ```yaml
-- uses: KayhanB21/riskratchet@v0.3.5
+- uses: KayhanB21/riskratchet@v0.3.6
 ```
 
 Both forms accept the same inputs. See the
 [main README](https://github.com/KayhanB21/riskratchet#github-action) for the
 full inputs table and CLI documentation.
+
+Since `v1.1.0` the wrapper also passes through `typescript`, `ts-coverage`, and
+`ts-entry` (riskratchet 0.3.6+), so a repo whose `[tool.riskratchet]` sets
+`typescript = true` gates its TypeScript through `@v1` too:
+
+```yaml
+      - uses: KayhanB21/riskratchet-action@v1
+        with:
+          typescript: 'true'
+          ts-coverage: coverage/lcov.info
+```
 
 ## Versioning
 
