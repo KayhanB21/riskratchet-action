@@ -16,7 +16,13 @@ inputs:
     required: false
     default: ''
   coverage:
-    description: 'Path to coverage.json. Optional; auto-coverage runs if absent.'
+    description: |
+      Path to a coverage.json your workflow already wrote. A path named here must exist —
+      a missing one is exit 2, not a silent zero-coverage score. Leaving this empty falls
+      back to auto-coverage, which shells out to `pytest`; that is NOT on the PATH of the
+      `uv tool install` environment this action creates, so an empty value only works for
+      a project with no Python under its scan paths. In short: add a step that writes the
+      report before this one. See the workflow in the README.
     required: false
     default: ''
   baseline:
@@ -60,7 +66,7 @@ runs:
   using: composite
   steps:
     - name: Delegate to KayhanB21/riskratchet
-      uses: KayhanB21/riskratchet@v0.3.6
+      uses: KayhanB21/riskratchet@v0.3.7
       with:
         paths: ${{ inputs.paths }}
         coverage: ${{ inputs.coverage }}
