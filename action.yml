@@ -66,7 +66,7 @@ runs:
   using: composite
   steps:
     - name: Delegate to KayhanB21/riskratchet
-      uses: KayhanB21/riskratchet@v0.3.7
+      uses: KayhanB21/riskratchet@v0.3.8
       with:
         paths: ${{ inputs.paths }}
         coverage: ${{ inputs.coverage }}
