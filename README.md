@@ -48,7 +48,7 @@ If you already use `riskratchet`, you can skip this wrapper and reference the
 root action directly:
 
 ```yaml
-- uses: KayhanB21/riskratchet@v0.3.10
+- uses: KayhanB21/riskratchet@v0.3.11
 ```
 
 Both forms accept the same inputs. See the
